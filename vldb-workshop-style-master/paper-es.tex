@@ -17,11 +17,19 @@
 
 \author{Sebasti\'an Garc\'ia Parra}
 \affiliation{%
-  \institution{Universidad de la Rep\'ublica}
+  \institution{Facultad de Ingenier\'ia, Universidad de la Rep\'ublica}
   \city{Montevideo}
   \country{Uruguay}
 }
-\email{TODO@example.org}
+\email{dgparra@fing.edu.uy}
+
+\author{Adriana Marotta}
+\affiliation{%
+  \institution{Facultad de Ingenier\'ia, Universidad de la Rep\'ublica}
+  \city{Montevideo}
+  \country{Uruguay}
+}
+\email{amarotta@fing.edu.uy}
 
 \begin{abstract}
 Las plataformas de redes sociales se han convertido en fuentes primarias de
@@ -86,8 +94,16 @@ conservar los metadatos de la fuente original. As\'i, una misma pieza de
 informaci\'on puede aparecer en varias versiones, con distintos autores, evidencias,
 audiencias y contextos de confianza.
 
+Este problema no es solo detecci\'on de desinformaci\'on. Muchos enfoques clasifican
+un post, un tema o una fuente como cre\'ible o no cre\'ible, pero ocultan las razones
+del score. Desde calidad de datos, esto es insuficiente: un consumidor, periodista
+o experto de dominio necesita saber si un valor bajo proviene de falta de evidencia,
+escasa expertise de la fuente, baja reputation o un camino de propagaci\'on inestable.
+El objetivo de este trabajo es que la credibilidad sea medible, descomponible y
+auditable.
+
 Este paper condensa una tesis de maestr\'ia sobre medici\'on de credibilidad en
-plataformas de redes sociales. Su contribuci\'on principal es un modelo de calidad
+plataformas de redes sociales~\cite{GarciaParra2024Thesis}. Su contribuci\'on principal es un modelo de calidad
 de datos, sensible al provenance, para evaluar clips. Un clip representa una unidad
 de informaci\'on social: post, tweet, comentario, caption de video o publicaci\'on
 espec\'ifica de una plataforma. El modelo es agn\'ostico de la red social y adaptable
@@ -135,12 +151,34 @@ m\'etricas espec\'ificas de dominio, porque medicina, pol\'itica y emergencias
 requieren evidencias distintas. Finalmente, debe ser modular para incorporar nuevos
 generadores de features, m\'etricas y estrategias de b\'usqueda.
 
+Un requisito adicional es la interpretabilidad. El modelo est\'a pensado para varios
+roles: usuarios finales que consumen indicadores de credibilidad, expertos en calidad
+de datos que configuran m\'etricas y expertos de dominio que validan ponderadores,
+umbrales y ejemplos. Por esa raz\'on, el modelo evita tratar la credibilidad como una
+etiqueta opaca y expone las dimensiones que contribuyen al resultado final.
+
 \section{Modelo de Calidad}
 
 Modelamos \emph{Credibility} como un cluster compuesto por dos dimensiones:
 \emph{Trustworthiness} y \emph{Provenance}. Trustworthiness estima la confiabilidad
 esperada del clip dentro de su dominio. Provenance captura origen, derivaci\'on y
 propagaci\'on.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=.82\textwidth,height=.42\textheight,keepaspectratio]{figures/credibility-dq-composition}
+  \caption{Composici\'on conceptual de la credibilidad y sus dimensiones de calidad asociadas~\cite{GarciaParra2024Thesis}.}
+  \Description{Diagrama con productor, consumidor, clip, credibilidad percibida y los factores de calidad expertise, reputation, verifiability y provenance.}
+  \label{fig:credibility-composition}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=.82\textwidth,height=.70\textheight,keepaspectratio]{figures/credibility-cluster-white}
+  \caption{Cluster de calidad para credibilidad~\cite{GarciaParra2024Thesis}.}
+  \Description{Jerarqu\'ia de credibilidad, trustworthiness, provenance y sus factores y m\'etricas de calidad.}
+  \label{fig:credibility-cluster}
+\end{figure*}
 
 Trustworthiness se descompone en tres factores. \emph{Reputation} eval\'ua la
 percepci\'on externa del autor o fuente mediante m\'etricas como engagement y
@@ -150,10 +188,49 @@ modificaciones y metadatos de verificaci\'on. \emph{Expertise} eval\'ua si el au
 tiene conocimiento espec\'ifico del dominio, usando m\'etricas como certification,
 production, influence y experience.
 
+La necesidad de esta descomposici\'on surge de la forma en que los usuarios juzgan
+credibilidad en redes sociales. Como resume \autoref{fig:credibility-composition},
+la credibilidad es construida por el productor y percibida por el consumidor, y se
+ve afectada por tres facetas definidas por Fogg y Tseng: credibilidad presumida,
+reputada y superficial~\cite{FoggTseng1999}. La credibilidad presumida surge de creencias previas y supuestos
+culturales, por ejemplo asumir que una persona que parece m\'edica es confiable en
+una discusi\'on de salud. La credibilidad reputada surge de evaluaciones de terceros,
+avales e historia de la fuente. La credibilidad superficial surge de se\~nales
+visibles como una presentaci\'on cuidada, un perfil que parece verificado o un enlace
+con apariencia profesional.
+
+Estas facetas son \'utiles, pero tambi\'en son modos de falla. En redes sociales, la
+credibilidad presumida puede amplificar sesgos de confirmaci\'on: los usuarios
+tienden a creer contenido que coincide con sus creencias incluso cuando la evidencia
+es d\'ebil. La credibilidad reputada puede sobrevalorar popularidad, porque una gran
+audiencia o muchas interacciones no implican competencia en el dominio. La
+credibilidad superficial puede premiar publicaciones que parecen autorizadas aunque
+no incluyan datos fuente ni afirmaciones verificables. Por eso, un modelo de calidad
+debe exponer expertise, reputation y verifiability por separado. Esta separaci\'on
+ayuda a reducir errores de credulidad, donde se acepta contenido de baja calidad
+como cre\'ible, y errores de incredulidad, donde se rechaza contenido cre\'ible porque
+las se\~nales de calidad relevantes no est\'an visibles.
+
 Provenance se descompone en attribution, process y trustworthiness path.
 Attribution identifica fuentes o entidades autoras. Process captura c\'omo se gener\'o
 o modific\'o el clip. Trustworthiness path captura c\'omo evoluciona la confianza a lo
 largo del camino de provenance.
+
+Provenance es necesario porque la credibilidad en redes sociales no queda fija en el
+momento de publicaci\'on. Un clip puede originarse en una instituci\'on confiable,
+ser copiado por una cuenta poco confiable, ser parafraseado en otra plataforma y
+luego ser compartido por un experto del dominio. A la inversa, una afirmaci\'on
+enga\~nosa puede ganar apariencia de credibilidad al pasar por intermediarios
+visualmente cre\'ibles o populares. Sin provenance, el modelo solo eval\'ua la
+apariencia actual del clip; con provenance, puede preguntar si el clip preserva la
+calidad de su fuente, si fue modificado y si el trustworthiness del camino de
+propagaci\'on es estable.
+
+\autoref{fig:credibility-cluster} muestra la jerarqu\'ia completa. La decisi\'on de
+dise\~no relevante es que provenance no se trata solamente como metadatos para
+trazabilidad; es una dimensi\'on de calidad utilizada en el score de credibilidad.
+Esto permite penalizar o reforzar un clip seg\'un c\'omo se comporta su
+trustworthiness cuando se republica, transforma o comparte por distintos actores.
 
 \begin{table}[t]
   \caption{Dimensiones y factores principales del modelo de credibilidad.}
@@ -185,6 +262,23 @@ de forma an\'aloga a partir de verifiability $V$, reputation $R$ y expertise $E$
 Los ponderadores pueden definirse manualmente por expertos, inferirse mediante
 reglas o aprenderse a partir de clips etiquetados.
 
+En el caso de estatinas, esta descomposici\'on es \'util porque evita mezclar se\~nales
+d\'ebiles. Una cuenta popular puede tener alta reputation pero ninguna expertise
+m\'edica. Un especialista puede tener expertise pero no aportar enlaces a fuentes. Un
+clip puede tener trustworthiness aceptable en forma aislada y aumentar su
+credibilidad si el provenance muestra propagaci\'on estable a trav\'es de perfiles
+m\'edicos confiables. El modelo mantiene estos casos diferenciados.
+
+Esta estructura tambi\'en permite reutilizar el modelo en distintos dominios. Las
+dimensiones abstractas se mantienen estables, pero las m\'etricas y ponderadores son
+definidos por expertos del dominio. En medicina, certification y access to source
+data pueden dominar el score. En emergencias, actualidad, geolocalizaci\'on y
+corroboraci\'on entre fuentes independientes pueden ser m\'as relevantes. En
+comunicaci\'on pol\'itica, attribution, propagaci\'on automatizada e historial de la
+fuente podr\'ian recibir mayor peso. El modelo, por tanto, no es una f\'ormula
+universal de credibilidad; es un marco para hacer expl\'icitas y comparables las
+evaluaciones de credibilidad espec\'ificas de dominio.
+
 \section{Flujo con Provenance}
 
 El flujo de procesamiento recibe un clip y calcula su credibilidad en seis etapas.
@@ -197,12 +291,42 @@ calculan m\'etricas por factor. Quinto, el m\'odulo de provenance busca clips
 equivalentes y reconstruye el grafo de linaje. Finalmente, el m\'odulo de
 credibilidad combina las m\'etricas en un valor final.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth,height=.35\textheight,keepaspectratio]{figures/processing-flow-white}
+  \caption{Flujo modular de procesamiento para evaluar credibilidad~\cite{GarciaParra2024Thesis}.}
+  \Description{Flujo de procesamiento desde clip original a clip normalizado, generaci\'on de features, m\'odulos de calidad y clip enriquecido.}
+  \label{fig:processing-flow}
+\end{figure}
+
+\autoref{fig:processing-flow} resume el workflow l\'ogico. El clip normalizado es el
+contrato entre la ingesta espec\'ifica de cada plataforma y el c\'alculo de calidad.
+Este contrato es importante porque las plataformas exponen campos, pol\'iticas y APIs
+distintas. Un clip normalizado contiene contenido, URI de plataforma, metadatos del
+autor, links, menciones, reacciones, comentarios, salidas de features y m\'etricas de
+calidad necesarias por los m\'odulos posteriores.
+
+La generaci\'on de features se separa del c\'alculo de m\'etricas. Un m\'odulo de feature
+puede extraer una profesi\'on m\'edica desde el perfil de usuario, detectar si se
+menciona una instituci\'on, calcular tama\~no de audiencia o identificar enlaces
+externos. Luego, un m\'odulo de calidad mapea esas features a un valor en $[0,1]$
+mediante f\'ormulas, reglas o modelos. Esta separaci\'on permite agregar extractores
+sin cambiar la sem\'antica del modelo de calidad.
+
 El m\'odulo de provenance distingue interacciones expl\'icitas e impl\'icitas. Las
 expl\'icitas son mecanismos propios de las plataformas: retweets, respuestas, citas o
 compartidos. Las impl\'icitas ocurren cuando los usuarios copian, parafrasean o
 republican contenido sin preservar un enlace directo. Estos casos son frecuentes en
 cross-sharing, donde el contenido se mueve entre plataformas y puede perder sus
 metadatos originales.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth,height=.30\textheight,keepaspectratio]{figures/provenance-framework-white}
+  \caption{Framework para buscar clips equivalentes y generar provenance~\cite{GarciaParra2024Thesis}.}
+  \Description{Workflow de generaci\'on de provenance con clips normalizados, m\'odulos de b\'usqueda, clips equivalentes, m\'etricas y salida de provenance.}
+  \label{fig:provenance-framework}
+\end{figure}
 
 Para abordar las interacciones impl\'icitas, el flujo usa equivalencia entre clips.
 Para clips de texto, instanciamos la equivalencia mediante similitud coseno con
@@ -214,6 +338,12 @@ Los clips equivalentes se representan luego mediante una estructura inspirada en
 PROV-SAID. Adaptamos PROV-SAID sustituyendo mensajes por clips, agregando el
 atributo \texttt{SocialNetwork}, modelando derivaciones entre plataformas y
 asociando m\'etricas de calidad a las entidades del provenance.
+
+\autoref{fig:provenance-framework} muestra este subflujo. El m\'odulo de b\'usqueda
+puede usar coincidencia exacta, fuzzy matching, b\'usqueda sem\'antica, expansi\'on de
+consultas, b\'usqueda multiling\"ue o b\'usqueda contextual con hashtags, URLs, fechas
+y menciones. En la prueba de concepto restringimos la equivalencia a texto, pero el
+modelo admite futuras m\'etricas multimodales para im\'agenes y videos.
 
 \subsection{Trustworthiness Path Stability}
 
@@ -227,6 +357,13 @@ de largo $n$. Definimos:
 Valores cercanos a 1 indican estabilidad. Valores bajos indican fluctuaciones,
 posiblemente causadas por modificaciones del contenido, p\'erdida de calidad de la
 fuente o propagaci\'on a trav\'es de actores menos confiables.
+
+Por ejemplo, consideremos un camino con valores de trustworthiness
+$(0.90,0.85,0.88,0.86)$. La variaci\'on total entre nodos consecutivos es
+$0.05+0.03+0.02=0.10$, por lo tanto $TPS=1-0.10/3=0.9667$. El valor indica que la
+credibilidad no se degrad\'o materialmente durante el camino. Esto es \'util en
+cross-sharing porque el mismo contenido puede preservar su claim aunque sea copiado
+a un contexto social diferente.
 
 \section{Prueba de Concepto}
 
@@ -248,8 +385,16 @@ respectivamente. Credibility combin\'o Trustworthiness Path Stability y
 trustworthiness con ponderadores de 0.6 y 0.4 cuando hab\'ia provenance disponible.
 Cuando no hab\'ia provenance, el modelo se apoy\'o solo en trustworthiness.
 
+Los m\'odulos de features implementados se enfocaron en evidencia de perfiles
+m\'edicos. Extrajeron profesi\'on m\'edica, educaci\'on m\'edica, verificabilidad m\'edica
+e influencia m\'edica a partir de informaci\'on p\'ublica de perfiles y evidencia
+textual disponible. Luego, los m\'odulos de calidad calcularon certification, access
+to source data, confidence, trustworthiness, Trustworthiness Path Stability y
+credibilidad final. Los umbrales fueron conservadores: 0.00 a 0.50 para baja
+credibilidad, 0.51 a 0.75 para media y 0.76 a 1.00 para alta.
+
 \begin{table}[t]
-  \caption{Comparaci\'on entre juicio experto y salida del modelo.}
+  \caption{Comparaci\'on entre juicio experto y salida del modelo~\cite{GarciaParra2024Thesis}.}
   \label{tab:results}
   \begin{tabular}{ccccc}
     \toprule
@@ -284,6 +429,13 @@ afirmaciones sobre escalabilidad o precisi\'on predictiva. El valor del experime
 es mostrar que un modelo de calidad puede producir m\'etricas interpretables y
 exponer cu\'ando el provenance cambia la evaluaci\'on.
 
+Las m\'etricas detalladas tambi\'en explican los resultados. Los clips publicados por
+cuentas con credenciales m\'edicas expl\'icitas y referencias institucionales
+verificables obtuvieron mayores valores en certification y access to source data.
+Los clips provenientes de perfiles autoproclamados o pseudocient\'ificos obtuvieron
+baja expertise incluso cuando ten\'ian se\~nales de audiencia. Confidence tuvo menor
+peso para evitar sobrevalorar popularidad en un dominio m\'edico sensible.
+
 \section{Discusi\'on}
 
 El modelo propuesto desplaza la medici\'on de credibilidad desde una predicci\'on
@@ -301,10 +453,25 @@ p\'ublicos disponibles. Finalmente, el modelo asume que los expertos pueden defi
 ponderadores significativos; trabajos futuros deber\'ian comparar calibraci\'on
 manual, basada en reglas y aprendida.
 
-Como trabajo futuro se propone escalar el experimento, incorporar equivalencia
-multimodal, mejorar procesamiento en tiempo real, agregar metadatos de calidad
-para completitud e incertidumbre del provenance, y dise\~nar visualizaciones de
-m\'etricas para usuarios finales.
+\subsection{Trabajo Futuro}
+
+Como trabajo futuro se propone ampliar la evaluaci\'on a datasets mayores, m\'as
+plataformas y m\'ultiples expertos de dominio, para medir acuerdo entre evaluadores
+y transferibilidad entre dominios. Una segunda l\'inea es la equivalencia multimodal
+entre clips, incluyendo im\'agenes, video, capturas de pantalla y par\'afrasis
+parciales, ya que el contenido enga\~noso suele propagarse mediante cambios de
+formato y no solo por reutilizaci\'on textual exacta. Esto tambi\'en motiva el uso
+de modelos peque\~nos de lenguaje (SLM) para procesar clips desde im\'agenes, como
+capturas de pantalla o publicaciones renderizadas, dado que el acceso a las APIs
+de redes sociales es cada vez m\'as restringido y heterog\'eneo entre plataformas.
+Estos SLM deber\'ian ejecutarse en el edge, sin enviar clips a la nube, para
+preservar la privacidad; adem\'as, el modelo de calidad de credibilidad deber\'ia
+integrarse al pipeline del SLM, de modo que la evidencia visual y textual extra\'ida
+se mapee directamente a dimensiones y m\'etricas de calidad.
+El componente de provenance tambi\'en deber\'ia incorporar metadatos de calidad sobre completitud, confianza,
+incertidumbre y enlaces faltantes. Finalmente, se requiere avanzar en la
+calibraci\'on de pesos y en visualizaciones para usuarios finales que expliquen c\'omo
+cada dimensi\'on de calidad contribuye al score final de credibilidad.
 
 \section{Conclusi\'on}
 
