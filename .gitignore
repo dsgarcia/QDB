@@ -1,4 +1,7 @@
 .DS_Store
+/main.tex
+*.zip
+vldb-workshop-style-master/
 *.aux
 *.bbl
 *.bcf
