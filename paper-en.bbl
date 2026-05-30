@@ -1,0 +1,175 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{9}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Arolfo, Rodriguez, and Vaisman}{Arolfo
+  et~al\mbox{.}}{2020}]%
+        {Arolfo2020}
+\bibfield{author}{\bibinfo{person}{Federico Arolfo}, \bibinfo{person}{Karen~C.
+  Rodriguez}, {and} \bibinfo{person}{Alejandro Vaisman}.}
+  \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Analyzing the Quality of Twitter Data Streams}.
+\newblock \bibinfo{journal}{\emph{Information Systems Frontiers}}
+  (\bibinfo{year}{2020}).
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/s10796-020-10072-x}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Batini and Scannapieco}{Batini and
+  Scannapieco}{2016}]%
+        {BatiniScannapieco2016}
+\bibfield{author}{\bibinfo{person}{Carlo Batini} {and} \bibinfo{person}{Monica
+  Scannapieco}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Data and Information Quality: Dimensions,
+  Principles and Techniques}}.
+\newblock \bibinfo{publisher}{Springer International Publishing}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Castillo, Mendoza, and Poblete}{Castillo
+  et~al\mbox{.}}{2011}]%
+        {Castillo2011}
+\bibfield{author}{\bibinfo{person}{Carlos Castillo}, \bibinfo{person}{Marcelo
+  Mendoza}, {and} \bibinfo{person}{Barbara Poblete}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Information Credibility on Twitter}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 20th International Conference on
+  World Wide Web}}. \bibinfo{pages}{675--684}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/1963405.1963500}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Fogg and Tseng}{Fogg and Tseng}{1999}]%
+        {FoggTseng1999}
+\bibfield{author}{\bibinfo{person}{B.~J. Fogg} {and} \bibinfo{person}{Hsiang
+  Tseng}.} \bibinfo{year}{1999}\natexlab{}.
+\newblock \showarticletitle{The Elements of Computer Credibility}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the SIGCHI Conference on Human
+  Factors in Computing Systems}}. \bibinfo{pages}{80--87}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/302979.303001}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Garc{\'i}a~Parra}{Garc{\'i}a~Parra}{2024}]%
+        {GarciaParra2024Thesis}
+\bibfield{author}{\bibinfo{person}{Sebasti{\'a}n Garc{\'i}a~Parra}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \emph{\bibinfo{title}{Medici{\'o}n de credibilidad en plataformas de
+  redes sociales [Measuring credibility in social media platforms]}}.
+\newblock Tesis de maestr{\'i}a. \bibinfo{school}{Universidad de la
+  Rep{\'u}blica, Facultad de Ingenier{\'i}a}, \bibinfo{address}{Montevideo,
+  Uruguay}.
+\newblock
+\urldef\tempurl%
+\url{https://hdl.handle.net/20.500.12008/50323}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Kuutila, Kiili, Kupiainen, Huusko, Li, Hosio,
+  Mantyla, Coiro, and Kiili}{Kuutila et~al\mbox{.}}{2024}]%
+        {Kuutila2024}
+\bibfield{author}{\bibinfo{person}{Miikka Kuutila}, \bibinfo{person}{Carita
+  Kiili}, \bibinfo{person}{Reijo Kupiainen}, \bibinfo{person}{Elisa Huusko},
+  \bibinfo{person}{Jing Li}, \bibinfo{person}{Simo Hosio},
+  \bibinfo{person}{Mika Mantyla}, \bibinfo{person}{Julie Coiro}, {and}
+  \bibinfo{person}{Kristian Kiili}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Revealing Complexities When Adult Readers Engage in
+  the Credibility Evaluation of Social Media Posts}.
+\newblock \bibinfo{journal}{\emph{Computers in Human Behavior}}
+  \bibinfo{volume}{151} (\bibinfo{year}{2024}), \bibinfo{pages}{108017}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1016/j.chb.2023.108017}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Simmhan, Plale, and Gannon}{Simmhan
+  et~al\mbox{.}}{2005}]%
+        {Simmhan2005}
+\bibfield{author}{\bibinfo{person}{Yogesh Simmhan}, \bibinfo{person}{Beth
+  Plale}, {and} \bibinfo{person}{Dennis Gannon}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{A Survey of Data Provenance in e-Science}.
+\newblock \bibinfo{journal}{\emph{SIGMOD Record}} \bibinfo{volume}{34},
+  \bibinfo{number}{3} (\bibinfo{year}{2005}), \bibinfo{pages}{31--36}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/1084805.1084812}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Taxidou, De~Nies, Verborgh, Fischer, Mannens,
+  and Van~de Walle}{Taxidou et~al\mbox{.}}{2015}]%
+        {Taxidou2015}
+\bibfield{author}{\bibinfo{person}{Io Taxidou}, \bibinfo{person}{Tom De~Nies},
+  \bibinfo{person}{Ruben Verborgh}, \bibinfo{person}{Peter~M. Fischer},
+  \bibinfo{person}{Erik Mannens}, {and} \bibinfo{person}{Rik Van~de Walle}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Modeling Information Diffusion in Social Media as
+  Provenance with W3C PROV}. In \bibinfo{booktitle}{\emph{Proceedings of the
+  24th International Conference on World Wide Web}}. \bibinfo{pages}{819--824}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2740908.2742475}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Yun-tao, Ling, and Yong-cheng}{Yun-tao
+  et~al\mbox{.}}{2005}]%
+        {Yuntao2005}
+\bibfield{author}{\bibinfo{person}{Zhang Yun-tao}, \bibinfo{person}{Gong Ling},
+  {and} \bibinfo{person}{Wang Yong-cheng}.} \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{An Improved TF-IDF Approach for Text
+  Classification}.
+\newblock \bibinfo{journal}{\emph{Journal of Zhejiang University-SCIENCE A}}
+  \bibinfo{volume}{6}, \bibinfo{number}{1} (\bibinfo{year}{2005}),
+  \bibinfo{pages}{49--55}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1631/BF02842477}
+\showDOI{\tempurl}
+
+
+\end{thebibliography}
