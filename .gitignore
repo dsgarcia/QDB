@@ -1,5 +1,6 @@
 .DS_Store
 /main.tex
+/paper-es.tex
 *.zip
 vldb-workshop-style-master/
 *.aux
