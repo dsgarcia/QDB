@@ -466,13 +466,17 @@ media platforms, and multiple domain experts in order to measure inter-rater
 agreement and domain transferability. A second line of work is multimodal clip
 equivalence, including images, video, screenshots, and partial paraphrases, since
 misleading content is often propagated through format changes rather than exact
-textual reuse. This also motivates using small language models (SLMs) for
-image-based clip processing, such as screenshots or rendered posts, as access to
-social media APIs is increasingly restricted and heterogeneous across platforms.
-These SLMs should run at the edge, without sending clips to the cloud, to preserve
-privacy; the credibility quality model should be integrated into the SLM pipeline
-so that extracted visual and textual evidence is mapped directly to quality
-dimensions and metrics.
+textual reuse. The current proof of concept uses TF-IDF as a transparent baseline
+for text-only equivalence, but future versions should evaluate whether small
+language models (SLMs) can replace or complement it for semantic clip equivalence,
+especially when content is paraphrased, translated, rendered as an image, or moved
+across platforms. This also motivates using SLMs for image-based clip processing,
+such as screenshots or rendered posts, as access to social media APIs is
+increasingly restricted and heterogeneous across platforms. These SLMs should run
+at the edge, without sending clips to the cloud, to preserve privacy; the
+credibility quality model should be integrated into the SLM pipeline so that
+extracted visual and textual evidence is mapped directly to quality dimensions
+and metrics.
 The provenance component should also be extended with explicit
 quality metadata for completeness, confidence, uncertainty, and missing links.
 Finally, the model requires further work on weight calibration and user-facing
