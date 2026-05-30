@@ -128,10 +128,10 @@ Prior work on information credibility in Twitter/X has shown that message
 features, user features, topic features, and propagation features can help
 estimate credibility~\cite{Castillo2011}. Other work studies social media data
 quality directly and adapts traditional data-quality dimensions to streams of
-tweets~\cite{Arolfo2020}. Recent user studies of health-related posts also show
-that source characteristics, evidence type, and prior-belief consistency shape
-credibility judgments, with prior beliefs and source expertise being especially
-influential~\cite{Kuutila2024}.
+tweets~\cite{Arolfo2020}. In the health-oriented analysis that motivates this
+model, Kuutila et al. are relevant because they show that readers use author
+biographies and perceived domain expertise as credibility cues, and that
+consistency with prior beliefs can affect how evidence is judged~\cite{Kuutila2024}.
 
 Provenance provides a complementary view. Data provenance captures origin,
 derivation, and transformations, and has been recognized as a central mechanism
@@ -198,14 +198,12 @@ assumption that a person who appears to be a physician is reliable in a medical
 discussion. Reputed credibility comes from third-party evaluations, endorsements,
 and the history of a source. Surface credibility comes from immediately visible
 signals such as a polished presentation, a verified-looking profile, or a
-professional-looking link. This decomposition is also consistent with empirical
-work on health-related social media posts: Kuutila et al. show that readers'
-credibility judgments are shaped by source characteristics, evidence type, and
-prior-belief consistency, and that prior beliefs and source expertise can be
-especially influential~\cite{Kuutila2024}. In the proposed model, expertise
-operationalizes source characteristics, verifiability captures the availability
-and quality of supporting evidence, and reputation is kept separate so that
-audience signals do not stand in for domain competence or evidence.
+professional-looking link. This is the point at which Kuutila et al. support the
+model design: if readers infer credibility from a profile
+biography or from an apparent professional role, then expertise must be measured
+as a distinct quality factor rather than absorbed into reputation or popularity;
+and if prior-belief consistency can lead readers to discount evidence quality,
+then verifiability must remain visible as a separate factor~\cite{Kuutila2024}.
 
 These facets are useful, but they are also failure modes. In social media,
 presumed credibility can amplify confirmation bias: users tend to believe content
