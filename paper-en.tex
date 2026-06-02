@@ -258,13 +258,16 @@ credibility value $C$ is computed as a weighted combination:
 \begin{equation}
   C = tT + pP,
 \end{equation}
-where $t$ and $p$ are domain-specific weights. Trustworthiness is similarly
-computed from verifiability $V$, reputation $R$, and expertise $E$:
+where $t$ and $p$ are domain-specific non-negative weights such that
+$t+p=1$. Trustworthiness is similarly computed from verifiability $V$,
+reputation $R$, and expertise $E$:
 \begin{equation}
   T = vV + rR + eE.
 \end{equation}
-Weights can be set manually by a domain expert, inferred through rules, or learned
-from expert-labeled clips.
+Here $V$, $R$, and $E$ are normalized in $[0,1]$, and $v$, $r$, and $e$ are
+non-negative weights such that $v+r+e=1$. Under these constraints,
+trustworthiness remains in $[0,1]$. Weights can be set manually by a domain
+expert, inferred through rules, or learned from expert-labeled clips.
 
 In the statins use case, this decomposition is useful because different weak
 signals should not be conflated. A popular account may have high reputation but no
@@ -359,9 +362,13 @@ length $n$. We define:
 \begin{equation}
   TPS = 1 - \frac{\sum_{i=1}^{n-1}|T_{i+1}-T_i|}{n-1}.
 \end{equation}
-Values close to 1 indicate stable trustworthiness across the path. Lower values
-indicate fluctuations, possibly caused by content modifications, loss of source
-quality, or propagation through less trustworthy actors.
+Since each $T_i$ is normalized in $[0,1]$, each consecutive difference is also in
+$[0,1]$. Therefore, for paths with $n \geq 2$, $TPS$ ranges from 0 to 1. Values
+close to 1 indicate stable trustworthiness across the path. Lower values indicate
+fluctuations, possibly caused by content modifications, loss of source quality, or
+propagation through less trustworthy actors. When a clip has no provenance path
+or the path contains a single clip ($n=1$), $TPS$ is not computed because there is
+no consecutive transition to evaluate.
 
 For example, consider a path with trustworthiness values 0.90, 0.85, 0.88, and
 0.86. The total variation between consecutive nodes is
