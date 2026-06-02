@@ -34,8 +34,8 @@
 \begin{abstract}
 Social media platforms have become primary sources of information for health,
 politics, crises, and everyday decisions. Yet users often consume and propagate
-content without objective indicators about its credibility, especially when
-content is copied, revised, or shared across platforms. This paper presents a
+content without explicit indicators about its credibility, especially when
+content is copied, revised, or shared across platforms. We present a
 data-quality model for measuring the credibility of social media clips. The model
 organizes credibility around two main dimensions: trustworthiness, computed from
 reputation, verifiability, and expertise, and provenance, which captures the
@@ -45,9 +45,9 @@ provenance path. We also describe a modular processing flow that normalizes clip
 from heterogeneous platforms, generates domain-specific features, computes
 quality metrics, and reconstructs provenance using explicit interactions and
 textual equivalence. A proof of concept on posts about statins and cholesterol,
-validated with a medical-domain expert, shows high agreement between expert
-judgments and the proposed model, while highlighting how provenance can change
-the final credibility assessment.
+validated with a medical-domain expert, matches the expert judgment for nine of
+eleven selected clips and illustrates how provenance can change the final
+credibility assessment.
 \end{abstract}
 
 \maketitle
@@ -101,19 +101,19 @@ a low score comes from missing evidence, weak source expertise, poor reputation,
 or an unstable propagation path. The goal of this work is therefore to make
 credibility measurable, decomposable, and auditable.
 
-This paper focuses on measuring credibility in social media platforms from a data-quality perspective. Its main contribution is a provenance-aware data-quality model for
-clips, where a clip denotes a social media information unit such as a post, tweet,
-comment, video caption, or platform-specific publication. The model is platform
-agnostic and domain adaptable: a data-quality expert defines the dimensions and
-metrics, while a domain expert adjusts weights and thresholds for a concrete use
-case.
+This paper focuses on credibility measurement in social media from a data-quality
+perspective. Its main contribution is a provenance-aware model for clips, where a
+clip denotes a social media information unit such as a post, tweet, comment,
+video caption, or platform-specific publication. The model is platform agnostic
+and domain adaptable: a data-quality expert defines the dimensions and metrics,
+while a domain expert adjusts weights and thresholds for a concrete use case.
 
-The paper makes three contributions. First, it defines a quality model for
-credibility that combines trustworthiness and provenance. Second, it introduces a
-metric, Trustworthiness Path Stability, to capture how trust changes as content is
-propagated and transformed. Third, it presents a modular processing flow and a
-proof of concept in the medical domain, focused on social media content about
-statins and cholesterol.
+The contributions are threefold. First, we define a quality model for credibility
+that combines trustworthiness and provenance. Second, we introduce
+Trustworthiness Path Stability, a metric that captures how trust changes as
+content is propagated and transformed. Third, we present a modular processing
+flow and a medical-domain proof of concept on social media content about statins
+and cholesterol.
 
 \section{Background and Requirements}
 
@@ -128,10 +128,9 @@ Prior work on information credibility in Twitter/X has shown that message
 features, user features, topic features, and propagation features can help
 estimate credibility~\cite{Castillo2011}. Other work studies social media data
 quality directly and adapts traditional data-quality dimensions to streams of
-tweets~\cite{Arolfo2020}. In the health-oriented analysis that motivates this
-model, Kuutila et al. are relevant because they show that readers use author
-biographies and perceived domain expertise as credibility cues, and that
-consistency with prior beliefs can affect how evidence is judged~\cite{Kuutila2024}.
+tweets~\cite{Arolfo2020}. Recent work on adult readers' credibility evaluation of
+social media posts reports that author biographies, perceived domain expertise,
+and consistency with prior beliefs influence how evidence is judged~\cite{Kuutila2024}.
 
 Provenance provides a complementary view. Data provenance captures origin,
 derivation, and transformations, and has been recognized as a central mechanism
@@ -141,17 +140,17 @@ models messages, agents, influence, and interactions, but its original formulati
 is centered on information diffusion within social platforms and does not directly
 model cross-platform sharing or quality metrics attached to the provenance path.
 
-From these observations, we derive four design requirements. The model must be
-platform agnostic, because credibility signals vary across X, Facebook, TikTok,
-Reddit, WhatsApp, and other platforms. It must be provenance aware, because the
-same content may become more or less credible as it is copied, revised, or shared.
-It must support domain-specific quality metrics, because credibility in medicine,
+These observations lead to four design requirements. The model must be platform
+agnostic, because credibility signals vary across X, Facebook, TikTok, Reddit,
+WhatsApp, and other platforms. It must be provenance aware, because the same
+content may become more or less credible as it is copied, revised, or shared. It
+must support domain-specific quality metrics, because credibility in medicine,
 politics, and emergency response depends on different evidence. Finally, it must
 be modular, so new feature generators, metrics, and provenance search strategies
 can be incorporated without redesigning the whole flow.
 
 A further requirement is interpretability. The proposed model is intended to be
-used by different roles: final users who consume credibility indicators, data
+used by different roles: end users who consume credibility indicators, data
 quality experts who configure metrics, and domain experts who validate weights,
 thresholds, and examples. For that reason, the model avoids treating credibility
 as a black-box label and instead exposes the quality dimensions that contribute to
@@ -198,14 +197,14 @@ assumption that a person who appears to be a physician is reliable in a medical
 discussion. Reputed credibility comes from third-party evaluations, endorsements,
 and the history of a source. Surface credibility comes from immediately visible
 signals such as a polished presentation, a verified-looking profile, or a
-professional-looking link. This is the point at which Kuutila et al. support the
-model design: if readers infer credibility from a profile
-biography or from an apparent professional role, then expertise must be measured
-as a distinct quality factor rather than absorbed into reputation or popularity;
-and if prior-belief consistency can lead readers to discount evidence quality,
-then verifiability must remain visible as a separate factor~\cite{Kuutila2024}.
+professional-looking link. These observations justify two design choices in the
+model. If readers infer credibility from a profile biography or from an apparent
+professional role, expertise should be measured as a distinct quality factor
+rather than absorbed into reputation or popularity. If prior-belief consistency
+can lead readers to discount evidence quality, verifiability should remain
+visible as a separate factor~\cite{Kuutila2024}.
 
-These facets are useful, but they are also failure modes. In social media,
+The same facets also expose failure modes. In social media,
 presumed credibility can amplify confirmation bias: users tend to believe content
 that matches their prior beliefs even when the evidence is weak. Reputed
 credibility can overvalue popularity, since a large audience or intense engagement
@@ -269,33 +268,31 @@ non-negative weights such that $v+r+e=1$. Under these constraints,
 trustworthiness remains in $[0,1]$. Weights can be set manually by a domain
 expert, inferred through rules, or learned from expert-labeled clips.
 
-In health-related social media, this decomposition is useful because different
-weak signals should not be conflated. A popular account may have high reputation
-but no medical expertise. A medical specialist may have expertise but provide no
-links to source data. A clip may have acceptable trustworthiness in isolation but
-become more credible if its provenance shows stable propagation through trusted
-medical profiles. The model keeps these cases distinguishable.
+In health-related social media, the decomposition helps avoid conflating weak
+signals. A popular account may have high reputation but no medical
+expertise. A medical specialist may have expertise but provide no links to source
+data. A clip may have acceptable trustworthiness in isolation and become more
+credible when its provenance shows stable propagation through trusted medical
+profiles. The model keeps these cases distinguishable.
 
-This structure is also what makes the model reusable across domains. The abstract
-dimensions remain stable, but the metrics and weights are supplied by domain
-experts. In medicine, certification and access to source data can dominate the
-score. In emergency response, freshness, geolocation, and corroboration across
-independent sources may be more important. In political communication, attribution,
-bot-like propagation, and source history may receive higher weights. The model is
+This structure supports reuse across domains. The abstract dimensions remain
+stable, while the metrics and weights are supplied by domain experts. In
+medicine, certification and access to source data can dominate the score. In
+emergency response, freshness, geolocation, and corroboration across independent
+sources may be more important. In political communication, attribution, bot-like
+propagation, and source history may receive higher weights. The model is
 therefore not a universal credibility formula; it is a framework for making
 domain-specific credibility assessments explicit and comparable.
 
 \section{Provenance-Aware Processing Flow}
 
-The processing flow receives a social media clip and computes its credibility
-through six stages. First, the clip is ingested from a platform-specific source.
-Second, it is normalized into a JSON representation that includes identifiers,
-platform URI, content, dates, geolocation, interactions, media, comments,
-performance metrics, user metadata, generated features, and quality metrics.
-Third, feature modules extract domain-specific signals. Fourth, quality modules
-compute metrics for each quality factor. Fifth, the provenance module searches for
-equivalent clips and reconstructs the provenance graph. Finally, the credibility
-module combines the metrics into a final score.
+The processing flow receives a social media clip and computes its credibility in
+six stages: platform-specific ingestion; normalization into a JSON representation
+with identifiers, platform URI, content, dates, geolocation, interactions, media,
+comments, performance metrics, user metadata, generated features, and quality
+metrics; domain-specific feature extraction; quality-metric computation;
+equivalent-clip search and provenance reconstruction; and final credibility
+aggregation.
 
 \begin{figure}[t]
   \centering
@@ -341,8 +338,8 @@ two clips $c_1$ and $c_2$, their textual similarity is:
   Sim(c_1,c_2) = \frac{c_1 \cdot c_2}{\|c_1\|\|c_2\|}.
 \end{equation}
 Equivalent clips are then mapped to a provenance representation inspired by
-PROV-SAID. We adapt PROV-SAID by replacing messages with clips, adding a
-\texttt{SocialNetwork} attribute, modeling cross-platform derivations, and
+PROV-SAID. We adapt PROV-SAID by replacing messages with clips, adding an
+attribute for the social network, modeling cross-platform derivations, and
 attaching quality metrics such as trustworthiness, verifiability, expertise, and
 reputation to provenance entities.
 
@@ -398,7 +395,7 @@ Stability and trustworthiness with weights of 0.6 and 0.4 when provenance was
 available. When no provenance was available, the model relied only on
 trustworthiness.
 
-The implemented feature modules focused on medical profile evidence. They
+In this proof of concept, the feature modules focused on medical profile evidence. They
 extracted medical profession, medical education, medical verifiability, and
 medical influence from public profile information and available textual evidence.
 The quality modules then computed certification, access to source data, confidence,
@@ -437,10 +434,10 @@ the expert score was closer to trustworthiness alone than to the final
 provenance-aware score.
 
 The preliminary implementation had an average execution time of 5220 ms per clip.
-Although this result is encouraging, the sample is too small for claims about
-scalability or predictive accuracy. The value of the experiment is instead to show
-that a data-quality model can produce interpretable credibility metrics and expose
-where provenance changes the assessment.
+The sample is too small for claims about scalability or predictive accuracy. The
+value of the experiment is instead to show that a data-quality model can produce
+interpretable credibility metrics and expose where provenance changes the
+assessment.
 
 The detailed metrics also show why the model produced these results. Clips
 published by accounts with explicit medical credentials and verifiable institutional
@@ -451,11 +448,10 @@ overvaluing popularity in a sensitive medical domain.
 
 \section{Discussion}
 
-The proposed model shifts credibility assessment from a monolithic prediction task
-to a data-quality workflow. This has two advantages. First, it makes the
-criteria explicit: users can inspect whether a score came from source
-verifiability, author expertise, reputation, or provenance stability. Second, it
-is a generic proposal that can be instantiated in different domains. Medical
+The proposed model shifts credibility assessment from a monolithic prediction
+task to a data-quality workflow. The first advantage is explicitness: users can
+inspect whether a score came from source verifiability, author expertise,
+reputation, or provenance stability. The second is adaptability. Medical
 credibility can use certification and access to source data, while other domains
 may define different features and thresholds.
 
@@ -474,17 +470,16 @@ agreement and domain transferability. A second line of work is multimodal clip
 equivalence, including images, video, screenshots, and partial paraphrases, since
 misleading content is often propagated through format changes rather than exact
 textual reuse. The current proof of concept uses TF-IDF as a transparent baseline
-for text-only equivalence, but future versions should evaluate whether small
-language models (SLMs) can replace or complement it for semantic clip equivalence,
-especially when content is paraphrased, translated, rendered as an image, or moved
-across platforms. This also motivates using SLMs for image-based clip processing,
-such as screenshots or rendered posts, as access to social media APIs is
+for text-only equivalence. Future versions should evaluate whether small language
+models (SLMs) can replace or complement it for semantic clip equivalence,
+especially when content is paraphrased, translated, rendered as an image, or
+moved across platforms. SLMs are also relevant for image-based clip processing,
+such as screenshots or rendered posts, because access to social media APIs is
 increasingly restricted and heterogeneous across platforms. These SLMs should run
-at the edge, without sending clips to the cloud, to preserve privacy; the
+at the edge, without sending clips to the cloud, to preserve privacy. The
 credibility quality model should be integrated into the SLM pipeline so that
 extracted visual and textual evidence is mapped directly to quality dimensions
-and metrics.
-The provenance component should also be extended with explicit
+and metrics. The provenance component should also be extended with explicit
 quality metadata for completeness, confidence, uncertainty, and missing links.
 Finally, the model requires further work on weight calibration and user-facing
 visualizations that explain how each quality dimension contributes to the final
@@ -498,7 +493,8 @@ clip equivalence, and Trustworthiness Path Stability, the model provides an
 interpretable way to evaluate social media content across platforms and domains.
 The proof of concept in the statins domain suggests that provenance can materially
 change credibility assessment and should be treated as a first-class quality signal.
-A detailed version of the model and its design rationale can be found in ~\cite{GarciaParra2024Thesis}; the code repository is available at
+A more detailed account of the model and its design rationale is available in
+the master's thesis~\cite{GarciaParra2024Thesis}; the code repository is available at
 \url{https://github.com/dsgarcia/clips-credibility}.
 
 \begin{acks}
