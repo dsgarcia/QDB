@@ -269,12 +269,12 @@ non-negative weights such that $v+r+e=1$. Under these constraints,
 trustworthiness remains in $[0,1]$. Weights can be set manually by a domain
 expert, inferred through rules, or learned from expert-labeled clips.
 
-In the statins use case, this decomposition is useful because different weak
-signals should not be conflated. A popular account may have high reputation but no
-medical expertise. A medical specialist may have expertise but provide no links to
-source data. A clip may have acceptable trustworthiness in isolation but become
-more credible if its provenance shows stable propagation through trusted medical
-profiles. The model keeps these cases distinguishable.
+In health-related social media, this decomposition is useful because different
+weak signals should not be conflated. A popular account may have high reputation
+but no medical expertise. A medical specialist may have expertise but provide no
+links to source data. A clip may have acceptable trustworthiness in isolation but
+become more credible if its provenance shows stable propagation through trusted
+medical profiles. The model keeps these cases distinguishable.
 
 This structure is also what makes the model reusable across domains. The abstract
 dimensions remain stable, but the metrics and weights are supplied by domain
