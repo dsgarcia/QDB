@@ -115,7 +115,7 @@ content is propagated and transformed. Third, we present a modular processing
 flow and a medical-domain proof of concept on social media content about statins
 and cholesterol.
 
-\section{Background and Requirements}
+\section{Background, Related Work, and Requirements}
 
 Credibility has long been treated as a perceived quality rather than an inherent
 property of an object~\cite{FoggTseng1999}. In data-quality terms, credibility is
@@ -139,6 +139,34 @@ PROV to represent information diffusion in social media~\cite{Taxidou2015}. It
 models messages, agents, influence, and interactions, but its original formulation
 is centered on information diffusion within social platforms and does not directly
 model cross-platform sharing or quality metrics attached to the provenance path.
+
+\begin{table*}[t]
+  \caption{Positioning of the proposed model with respect to related work.}
+  \label{tab:related-gap}
+  \small
+  \begin{tabular}{@{}p{.20\textwidth}p{.36\textwidth}p{.37\textwidth}@{}}
+    \toprule
+    Line of work & Main focus & Remaining gap\\
+    \midrule
+    Web and social credibility & Multidimensional credibility cues and user perception & Limited operationalization as auditable data-quality metrics\\
+    Twitter/X credibility models & Classification using message, user, topic, and propagation features & Platform-specific models with limited provenance-aware data-quality interpretation\\
+    Social media data quality & Quality dimensions for social media streams & Credibility is not modeled as a provenance-aware quality cluster\\
+    Social media provenance & Origin, diffusion, and interaction modeling & Quality metrics are not integrated into provenance paths\\
+    This work & Trustworthiness, provenance, clip equivalence, and Trustworthiness Path Stability & Interpretable, domain-adaptable credibility measurement\\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+Table~\ref{tab:related-gap} summarizes this positioning. The gap addressed in
+this paper is not the absence of credibility classifiers or
+provenance models. Rather, the gap is the lack of a data-quality model that makes
+credibility decomposable, provenance-aware, and reusable across social media
+platforms and domains. Existing credibility approaches often estimate a label or
+score from platform-specific features, while provenance approaches model
+diffusion and derivation without attaching domain-specific quality metrics to the
+path. Our proposal bridges these lines by treating credibility as a quality
+cluster and by using provenance not only as traceability metadata but also as an
+input to the credibility score.
 
 These observations lead to four design requirements. The model must be platform
 agnostic, because credibility signals vary across X, Facebook, TikTok, Reddit,
