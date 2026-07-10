@@ -461,6 +461,20 @@ all profiles involved in the cross-platform propagation path, which explains why
 the expert score was closer to trustworthiness alone than to the final
 provenance-aware score.
 
+Three qualitative examples illustrate this effect. Clip 1 was associated with a
+cardiology profile with high certification and audience confidence, but limited
+explicit access to source data. Its trustworthiness score was therefore medium
+($0.62$). However, the clip was propagated through a stable path with high
+Trustworthiness Path Stability ($0.92$), which raised its final credibility to
+$0.80$. Clip 5 followed a similar pattern: stronger source and certification
+signals yielded medium trustworthiness ($0.69$), and a stable provenance path
+($0.83$) raised the final score to $0.78$. In both cases, the qualitative
+explanation is not that the original clip was automatically high credibility, but
+that provenance added evidence unavailable in the expert's isolated view.
+Conversely, Clip 7 came from a self-described naturopath profile, with weak
+certification and limited verifiable source evidence; it remained low credibility
+($0.18$) despite having some audience-related signals.
+
 The preliminary implementation had an average execution time of 5220 ms per clip.
 The sample is too small for claims about scalability or predictive accuracy. The
 value of the experiment is instead to show that a data-quality model can produce
