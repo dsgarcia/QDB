@@ -343,12 +343,23 @@ and APIs. A normalized clip contains the content, platform URI, author metadata,
 links, mentions, reactions, comments, feature outputs, and quality metrics needed
 by downstream modules.
 
+Normalization can be implemented automatically when the platform exposes the
+required fields through an API or export, and semi-automatically when access is
+limited. In both cases, platform-specific ingestion maps the available fields to
+the common JSON structure; missing fields remain explicit null or unknown values
+rather than being silently inferred. This preserves comparability across
+platforms while making data availability visible to the quality modules.
+
 The feature-generation stage is intentionally separated from the quality-metric
 stage. A feature module may extract a medical profession from a user profile,
 detect whether an institution is mentioned, compute audience size, or identify
 external links. A quality module then maps those features to a value in $[0,1]$,
 using a formula, a rule, or a model. This separation lets a new feature extractor
 be added without changing the semantics of the quality model.
+The mapping from features to quality values may be rule-based, model-based, or
+configured by a domain expert. Thus, the processing flow is not tied to a single
+automatic classifier: it provides a modular way to combine automated extraction
+with expert-defined quality criteria.
 
 The provenance module distinguishes explicit and implicit interactions. Explicit
 interactions are represented by platform mechanisms such as retweets, replies,
@@ -383,6 +394,12 @@ expansion, multilingual search, or contextual search with hashtags, URLs, dates,
 and user mentions. In the current proof of concept, we restrict the equivalence
 metric to text clips, but the model allows future multimodal equivalence metrics
 for images and videos.
+Equivalence search is applied to a candidate set, not to all possible social
+media clips. Candidate sets can be built from explicit links, shared URLs,
+hashtags, time windows, user mentions, platform search results, or previously
+collected clips in a case study. The current proof of concept does not use social
+network graph distance to rank candidates; graph-based neighborhood expansion and
+relationship-distance weighting are left as future extensions.
 
 \subsection{Trustworthiness Path Stability}
 
@@ -421,6 +438,8 @@ The experiment started from 97 clips collected from multiple social media
 platforms using keywords related to statins and cholesterol. Eleven clips were
 preselected to cover different platforms and credibility levels. A medical-domain
 expert classified the selected clips into credibility levels and provided scores.
+Equivalence and provenance were evaluated over this collected set, rather than
+through an exhaustive search over all social media content.
 
 For the experiment, trustworthiness was computed from three metrics: access to
 source data, certification, and confidence. The domain expert assigned weights of
