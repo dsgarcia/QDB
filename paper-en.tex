@@ -322,13 +322,13 @@ metrics; domain-specific feature extraction; quality-metric computation;
 equivalent-clip search and provenance reconstruction; and final credibility
 aggregation.
 
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics[width=\linewidth,height=.35\textheight,keepaspectratio]{figures/processing-flow-en}
+  \includegraphics[width=.64\textwidth,keepaspectratio]{figures/processing-flow-en}
   \caption{Modular processing flow for credibility assessment~\cite{GarciaParra2024Thesis}.}
   \Description{Processing flow from original clip to normalized clip, feature generation, quality modules, and enriched clip.}
   \label{fig:processing-flow}
-\end{figure}
+\end{figure*}
 
 \autoref{fig:processing-flow} summarizes the logical workflow. The normalized clip
 is the contract between platform-specific ingestion and quality computation. This
@@ -351,13 +351,13 @@ repost content without preserving a direct platform link. These cases are common
 in cross-sharing, where content moves between platforms and may lose its original
 metadata.
 
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics[width=\linewidth,height=.30\textheight,keepaspectratio]{figures/provenance-framework-en}
+  \includegraphics[width=.62\textwidth,keepaspectratio]{figures/provenance-framework-en}
   \caption{Framework for searching equivalent clips and generating provenance~\cite{GarciaParra2024Thesis}.}
   \Description{Provenance generation workflow with normalized clips, equivalent-clip search modules, extracted clips, metrics, and provenance output.}
   \label{fig:provenance-framework}
-\end{figure}
+\end{figure*}
 
 To address implicit interactions, the flow uses clip equivalence. For text clips,
 we instantiate equivalence with TF-IDF cosine similarity~\cite{Yuntao2005}. Given
