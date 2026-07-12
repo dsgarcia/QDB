@@ -142,6 +142,12 @@ PROV to represent information diffusion in social media~\cite{Taxidou2015}. It
 models messages, agents, influence, and interactions, but its original formulation
 is centered on information diffusion within social platforms and does not directly
 model cross-platform sharing or quality metrics attached to the provenance path.
+Cross-platform sharing adds a provenance challenge: content can be shared through
+platform mechanisms or manually copied into another platform. In the manual case,
+source metadata may be lost, the content may be modified, and attribution becomes
+harder. This makes the relevant social-network aspect a problem of interactions,
+derivations, and platform-aware provenance rather than only a classification
+problem over isolated posts.
 
 \begin{table*}[t]
   \caption{Positioning of the proposed model with respect to related work.}
@@ -154,7 +160,7 @@ model cross-platform sharing or quality metrics attached to the provenance path.
     Web and social credibility & Multidimensional credibility cues and user perception & Limited operationalization as auditable data-quality metrics\\
     Twitter/X credibility models & Classification using message, user, topic, and propagation features & Platform-specific models with limited provenance-aware data-quality interpretation\\
     Social media data quality & Quality dimensions for social media streams & Credibility is not modeled as a provenance-aware quality cluster\\
-    Social media provenance & Origin, diffusion, and interaction modeling & Quality metrics are not integrated into provenance paths\\
+    Social media provenance & Origin, diffusion, interactions, and cross-platform sharing & Quality metrics are not integrated into platform-aware provenance paths\\
     \bottomrule
   \end{tabular}
 \end{table*}
