@@ -476,8 +476,11 @@ available, stable propagation through trustworthy accounts should increase the
 credibility of the original content.
 
 In this proof of concept, the feature modules focused on medical profile evidence. They
-extracted medical profession, medical education, medical verifiability, and
-medical influence from public profile information and available textual evidence.
+used Gemini 1.5 Flash with task-specific prompts to extract medical profession,
+medical education, medical verifiability, and medical influence from public
+profile information and available textual evidence. This is an implementation
+choice of the proof of concept; the framework only requires feature modules that
+produce normalized values for the quality metrics.
 The quality modules then computed certification, access to source data, confidence,
 trustworthiness, Trustworthiness Path Stability, and final credibility. Thresholds
 were conservative: values from 0.00 to 0.50 were considered low credibility,
