@@ -450,6 +450,25 @@ Stability and trustworthiness with weights of 0.6 and 0.4 when provenance was
 available. When no provenance was available, the model relied only on
 trustworthiness.
 
+The three trustworthiness submetrics were computed as normalized values in
+$[0,1]$. Access to source data was set to the medical-verifiability feature
+extracted for the clip, or 0 when unavailable. Certification combined formal
+medical education and declared medical profession; confidence combined medical
+influence and audience size:
+\begin{align*}
+  Certification &= 0.6\,EQ + 0.4\,PQ,\\
+  Confidence &= 0.7\,I + 0.3\,\frac{\log(A+1)}{\log(A_{\max}+1)}.
+\end{align*}
+Here $EQ$ is education quality, $PQ$ is profession quality, $I$ is medical
+influence, and $A$ is audience size. These weights were assigned with the
+medical-domain expert for this case study. Access to source data and
+certification received the highest weights because medical credibility depends
+strongly on verifiable evidence and professional credentials. Confidence received
+a lower weight to prevent popularity or audience size from dominating the score
+in a sensitive health domain. The credibility weights also reflect the expert
+criterion that, when provenance is available, stable propagation through
+trustworthy accounts should increase the credibility of the original content.
+
 In this proof of concept, the feature modules focused on medical profile evidence. They
 extracted medical profession, medical education, medical verifiability, and
 medical influence from public profile information and available textual evidence.
