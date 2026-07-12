@@ -460,14 +460,17 @@ influence and audience size:
   Confidence &= 0.7\,I + 0.3\,\frac{\log(A+1)}{\log(A_{\max}+1)}.
 \end{align*}
 Here $EQ$ is education quality, $PQ$ is profession quality, $I$ is medical
-influence, and $A$ is audience size. These weights were assigned with the
-medical-domain expert for this case study. Access to source data and
-certification received the highest weights because medical credibility depends
-strongly on verifiable evidence and professional credentials. Confidence received
-a lower weight to prevent popularity or audience size from dominating the score
-in a sensitive health domain. The credibility weights also reflect the expert
-criterion that, when provenance is available, stable propagation through
-trustworthy accounts should increase the credibility of the original content.
+influence, $A$ is audience size, and $A_{\max}=100{,}000$ is the reference
+maximum audience size used for normalization in the proof of concept. Missing
+feature values were set to 0. The aggregation weights for trustworthiness and
+credibility were assigned with the medical-domain expert for this case study.
+Access to source data and certification received the highest weights because
+medical credibility depends strongly on verifiable evidence and professional
+credentials. Confidence received a lower aggregation weight to prevent popularity
+or audience size from dominating the score in a sensitive health domain. The
+credibility weights also reflect the expert criterion that, when provenance is
+available, stable propagation through trustworthy accounts should increase the
+credibility of the original content.
 
 In this proof of concept, the feature modules focused on medical profile evidence. They
 extracted medical profession, medical education, medical verifiability, and
