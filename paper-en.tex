@@ -45,9 +45,9 @@ provenance path. We also describe a modular processing flow that normalizes clip
 from heterogeneous platforms, generates domain-specific features, computes
 quality metrics, and reconstructs provenance using explicit interactions and
 textual equivalence. A proof of concept on posts about statins and cholesterol,
-validated with a medical-domain expert, matches the expert judgment for nine of
-eleven selected clips and illustrates how provenance can change the final
-credibility assessment.
+compared against a medical-domain expert's judgment, matches that judgment for
+nine of eleven selected clips and illustrates how provenance can change the
+final credibility assessment.
 \end{abstract}
 
 \maketitle
@@ -115,17 +115,11 @@ content is propagated and transformed. Third, we present a modular processing
 flow and a medical-domain proof of concept on social media content about statins
 and cholesterol.
 
-\section{Background, Related Work, and Requirements}
+\section{Related Work}
 
 Credibility has long been treated as a perceived quality rather than an inherent
 property of an object~\cite{FoggTseng1999}. In data-quality terms, credibility is
 related to trustworthiness, reputation, and provenance~\cite{BatiniScannapieco2016}.
-In this paper, these concepts are organized hierarchically: reputation is modeled
-as one factor that contributes to trustworthiness, while provenance is modeled as
-a complementary top-level quality dimension.
-For social media, this relation is especially important because credibility is
-evaluated under uncertainty: users often see only a fragment of the original
-context, and the perceived authority of an author may be misleading.
 
 Prior work on information credibility in Twitter/X has shown that message
 features, user features, topic features, and propagation features can help
@@ -150,24 +144,37 @@ derivations, and platform-aware provenance rather than only a classification
 problem over isolated posts.
 
 \begin{table*}[t]
-  \caption{Positioning of the proposed model with respect to related work.}
+  \caption{Remaining gaps in representative related work.}
   \label{tab:related-gap}
   \small
-  \begin{tabular}{@{}p{.20\textwidth}p{.36\textwidth}p{.37\textwidth}@{}}
+  \begin{tabular}{@{}p{.20\textwidth}p{.24\textwidth}p{.27\textwidth}p{.22\textwidth}@{}}
     \toprule
-    Line of work & Main focus & Remaining gap\\
+    Related strand & Representative work & Covered aspects & Remaining gap addressed here\\
     \midrule
-    Web and social credibility & Multidimensional credibility cues and user perception & Limited operationalization as auditable data-quality metrics\\
-    Twitter/X credibility models & Classification using message, user, topic, and propagation features & Platform-specific models with limited provenance-aware data-quality interpretation\\
-    Social media data quality & Quality dimensions for social media streams & Credibility is not modeled as a provenance-aware quality cluster\\
-    Social media provenance & Origin, diffusion, interactions, and cross-platform sharing & Quality metrics are not integrated into platform-aware provenance paths\\
+    Perceived credibility
+      & Fogg and Tseng~\cite{FoggTseng1999}; Kuutila et al.~\cite{Kuutila2024}
+      & Credibility facets, user perception, author expertise, and evidence judgment
+      & Credibility is not operationalized as auditable data-quality metrics\\
+    Platform-specific credibility
+      & Castillo et al.~\cite{Castillo2011}
+      & Message, user, topic, and propagation features for Twitter/X credibility
+      & Focuses on estimation rather than a reusable quality model across platforms and domains\\
+    Social media data quality
+      & Arolfo et al.~\cite{Arolfo2020}
+      & Adaptation of data-quality dimensions to social media streams
+      & Credibility is not modeled as a quality cluster combining trustworthiness and provenance\\
+    Provenance models
+      & Simmhan et al.~\cite{Simmhan2005}; Taxidou et al.~\cite{Taxidou2015}
+      & Origin, derivation, diffusion, agents, messages, influence, and interactions
+      & Domain-specific credibility metrics are not integrated into provenance paths\\
     \bottomrule
   \end{tabular}
 \end{table*}
 
-Table~\ref{tab:related-gap} summarizes the main related lines of work and their
-remaining gaps. The gap addressed in this paper is not the absence of credibility
-classifiers or
+Table~\ref{tab:related-gap} highlights remaining gaps in representative work
+most directly connected to the design requirements of the model; a broader
+review is available in the master's thesis~\cite{GarciaParra2024Thesis}. The gap
+addressed in this paper is not the absence of credibility classifiers or
 provenance models. Rather, the gap is the lack of a data-quality model that makes
 credibility decomposable, provenance-aware, and reusable across social media
 platforms and domains. Existing credibility approaches often estimate a label or
@@ -183,7 +190,7 @@ WhatsApp, and other platforms. It must be provenance aware, because the same
 content may become more or less credible as it is copied, revised, or shared. It
 must support domain-specific quality metrics, because credibility in medicine,
 politics, and emergency response depends on different evidence. Finally, it must
-be modular, so new feature generators, metrics, and provenance search strategies
+be modular, so new feature modules, metrics, and provenance search strategies
 can be incorporated without redesigning the whole flow.
 
 A further requirement is interpretability. The proposed model is intended to be
@@ -201,7 +208,8 @@ expected reliability of the clip in its domain. Provenance captures the origin,
 derivation, and propagation path of the clip. This two-dimensional organization
 does not exclude reputation; rather, it places reputation inside
 trustworthiness, together with verifiability and expertise, because reputation is
-one signal used to estimate whether a clip or its source should be trusted.
+one signal used to estimate whether the source associated with a clip should be
+trusted.
 
 \begin{figure*}[t]
   \centering
@@ -297,7 +305,9 @@ republished, transformed, or shared by different actors.
   \end{tabular}
 \end{table}
 
-Let $T$ denote trustworthiness and $P$ denote provenance, both in $[0,1]$. The
+\autoref{tab:model} summarizes the core dimensions, factors, and example metrics
+used by the model. Let $T$ denote trustworthiness and $P$ denote provenance, both
+in $[0,1]$. The
 credibility value $C$ is computed as a weighted combination:
 \begin{equation}
   C = tT + pP,
@@ -356,14 +366,15 @@ by downstream modules.
 
 Normalization maps the attributes of the original clip from each platform to the
 attributes of the normalized clip. In the reference implementation, this step is
-performed by a Cloud Function that processes each input clip and stores the
+performed by a Cloud Function, a serverless Google Cloud component used in the
+proof-of-concept deployment, which processes each input clip and stores the
 resulting normalized JSON object for the following stages.
 
 The feature-generation stage is intentionally separated from the quality-metric
 stage. A feature module may extract a medical profession from a user profile,
 detect whether an institution is mentioned, compute audience size, or identify
 external links. A quality module then maps those features to a value in $[0,1]$,
-using a formula, a rule, or a model. This separation lets a new feature extractor
+using a formula, a rule, or a model. This separation lets a new feature module
 be added without changing the semantics of the quality model.
 Feature orchestration depends on the clip type, the fields available in the
 normalized clip, the flow configuration, and resource priorities. The data-quality
@@ -496,7 +507,7 @@ were conservative: values from 0.00 to 0.50 were considered low credibility,
   \label{tab:results}
   \begin{tabular}{ccccc}
     \toprule
-    Clip & Expert & Score & Model & Cred.\\
+    Clip & Expert & Expert score & Model & Cred.\\
     \midrule
     1 & Medium & 0.60 & High & 0.80\\
     2 & Medium & 0.70 & Medium & 0.68\\
@@ -513,27 +524,31 @@ were conservative: values from 0.00 to 0.50 were considered low credibility,
   \end{tabular}
 \end{table}
 
-The model agreed with the expert level in nine of the eleven clips
-(\autoref{tab:results}). The two differences corresponded to clips for which
-provenance increased the credibility score: both had stable paths and were shared
-by users with relatively high trustworthiness. The expert did not have access to
-all profiles involved in the cross-platform propagation path, which explains why
-the expert score was closer to trustworthiness alone than to the final
-provenance-aware score.
+The model agreed with the expert-assigned credibility level in nine of the
+eleven clips (\autoref{tab:results}). In the table, \emph{Expert score} is the
+numeric score assigned by the domain expert, while \emph{Cred.} is the final
+credibility score computed by the model. The two differences corresponded to
+clips for which provenance increased the model score: both had stable paths and
+were shared by users with relatively high trustworthiness. The expert did not
+have access to all profiles involved in the cross-platform propagation path,
+which explains why the expert score was closer to trustworthiness alone than to
+the final provenance-aware score.
 
-Three qualitative examples illustrate this effect. Clip 1 was associated with a
-cardiology profile with high certification and audience confidence, but limited
-explicit access to source data. Its trustworthiness score was therefore medium
-($0.62$). However, the clip was propagated through a stable path with high
-Trustworthiness Path Stability ($0.92$), which raised its final credibility to
-$0.80$. Clip 5 followed a similar pattern: stronger source and certification
-signals yielded medium trustworthiness ($0.69$), and a stable provenance path
-($0.83$) raised the final score to $0.78$. In both cases, the qualitative
-explanation is not that the original clip was automatically high credibility, but
-that provenance added evidence unavailable in the expert's isolated view.
-Conversely, Clip 7 came from a self-described naturopath profile, with weak
-certification and limited verifiable source evidence; it remained low credibility
-($0.18$) despite having some audience-related signals.
+Three qualitative examples illustrate this comparison. The expert assigned Clip~1
+a medium score ($0.60$). In the model, the clip was associated with a cardiology
+profile with high certification and audience confidence, but limited explicit
+access to source data. Its trustworthiness score was therefore medium ($0.62$).
+However, the clip was propagated through a stable path with high Trustworthiness
+Path Stability ($0.92$), which raised its final model credibility to $0.80$.
+The expert also assigned Clip~5 a medium score ($0.60$). In the model, stronger
+source and certification signals yielded medium trustworthiness ($0.69$), and a
+stable provenance path ($0.83$) raised the final model score to $0.78$. In both
+cases, the qualitative explanation is not that the original clip was
+automatically high credibility, but that provenance added evidence unavailable in
+the expert's isolated view. Conversely, the expert assigned Clip~7 a low score
+($0.00$). The model also kept this clip at low credibility ($0.18$), because it
+came from a self-described naturopath profile, with weak certification and
+limited verifiable source evidence, despite having some audience-related signals.
 
 The preliminary implementation had an average execution time of 5220 ms per clip.
 The sample is too small for claims about scalability or predictive accuracy. The
@@ -548,7 +563,7 @@ from self-proclaimed or pseudoscientific profiles obtained low expertise values
 even when they had audience signals. Confidence had a smaller weight to avoid
 overvaluing popularity in a sensitive medical domain.
 
-\section{Discussion, Future Work, and Conclusion}
+\section{Discussion}
 
 The proposed model shifts credibility assessment from a monolithic prediction
 task to a data-quality workflow. The first advantage is explicitness: users can
@@ -564,7 +579,19 @@ search engines, and available public metadata. Finally, the model assumes that
 domain experts can define meaningful weights; future work should compare manual,
 rule-based, and machine-learned weight calibration.
 
-\noindent\textbf{Future work.} Future work should expand the evaluation to larger datasets, additional social
+\section{Conclusion}
+
+This paper presented a provenance-aware data-quality model for measuring
+credibility in social media platforms. By combining trustworthiness, provenance,
+clip equivalence, and Trustworthiness Path Stability, the model provides an
+interpretable way to evaluate social media content across platforms and domains.
+The proof of concept in the statins domain suggests that provenance can materially
+change credibility assessment and should be treated as a first-class quality signal.
+A more detailed account of the model and its design rationale is available in
+the master's thesis~\cite{GarciaParra2024Thesis}; the code repository is available at
+\url{https://github.com/dsgarcia/clips-credibility}.
+
+Future work should expand the evaluation to larger datasets, additional social
 media platforms, and multiple domain experts in order to measure inter-rater
 agreement and domain transferability. A second line of work is multimodal clip
 equivalence, including images, video, screenshots, and partial paraphrases, since
@@ -584,16 +611,6 @@ quality metadata for completeness, confidence, uncertainty, and missing links.
 Finally, the model requires further work on weight calibration and user-facing
 visualizations that explain how each quality dimension contributes to the final
 credibility score.
-
-\noindent\textbf{Conclusion.} This paper presented a provenance-aware data-quality model for measuring
-credibility in social media platforms. By combining trustworthiness, provenance,
-clip equivalence, and Trustworthiness Path Stability, the model provides an
-interpretable way to evaluate social media content across platforms and domains.
-The proof of concept in the statins domain suggests that provenance can materially
-change credibility assessment and should be treated as a first-class quality signal.
-A more detailed account of the model and its design rationale is available in
-the master's thesis~\cite{GarciaParra2024Thesis}; the code repository is available at
-\url{https://github.com/dsgarcia/clips-credibility}.
 
 \begin{acks}
 This work was partially funded by Comisión Sectorial de Investigación Científica (CSIC), Universidad de la República, Uruguay.
